@@ -5,12 +5,12 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/TCP404/eutil/fetch"
+	"github.com/gin-gonic/gin"
+
 	"esdumpweb/initial"
 	"esdumpweb/kit/verify"
 	"esdumpweb/schema"
-
-	"github.com/TCP404/eutil/fetch"
-	"github.com/gin-gonic/gin"
 )
 
 func loginHandle(c *gin.Context) {
@@ -35,10 +35,20 @@ func loginHandle(c *gin.Context) {
 		return
 	}
 
-	// if err := initial.WireConfigManager().Flush(); err != nil {
-	// 	slog.Error("save config failed", "err", err)
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"message": "保存配置失败"})
-	// 	return
-	// }
+	if err := initial.WireConfigManager().Flush(); err != nil {
+		slog.Error("save config failed", "err", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "保存配置失败"})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "登录成功"})
+}
+
+func logoutHandle(c *gin.Context) {
+	initial.WireConfig().Addrs = make(map[string]initial.HostConfig)
+	if err := initial.WireConfigManager().Flush(); err != nil {
+		slog.Error("save config failed", "err", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "保存配置失败"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "登出成功"})
 }

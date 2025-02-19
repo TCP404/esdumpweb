@@ -27,3 +27,7 @@ func LoginFixer(req *LoginReq) error {
 	req.AddrHost = addrHost
 	return nil
 }
+
+type LogoutReq struct {
+	AddrName string `json:"host"`
+}

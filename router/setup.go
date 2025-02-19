@@ -6,13 +6,13 @@ import (
 	"html/template"
 	"log/slog"
 
-	"esdumpweb/kit/verify"
-	"esdumpweb/resources"
-	"esdumpweb/schema"
-
 	"github.com/TCP404/eutil"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+
+	"esdumpweb/kit/verify"
+	"esdumpweb/resources"
+	"esdumpweb/schema"
 )
 
 var (
@@ -100,6 +100,7 @@ func setup(app *gin.Engine) error {
 	loginG := app.Group("/")
 	{
 		loginG.POST("/login", verify.ValidateX(schema.LoginFixer), loginHandle)
+		loginG.GET("/logout", logoutHandle)
 	}
 
 	return nil

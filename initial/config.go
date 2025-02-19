@@ -3,7 +3,6 @@ package initial
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -65,6 +64,8 @@ type ConfigManager struct {
 	Config         *Config
 	configFile     *os.File
 	configFilePath string
+	encoder        *json.Encoder
+	decoder        *json.Decoder
 }
 
 func WireConfigManager() *ConfigManager {
@@ -79,31 +80,40 @@ func WireConfig() *Config {
 	return WireConfigManager().Config
 }
 
+func (c *ConfigManager) setDefault() error {
+	if c.Config.SaveDir == "" {
+		c.Config.SaveDir = downloadedDir
+	}
+	if c.Config.Addrs == nil {
+		c.Config.Addrs = make(map[string]HostConfig)
+	}
+	if err := c.configFile.Truncate(0); err != nil {
+		return err
+	}
+	if _, err := c.configFile.Seek(0, 0); err != nil {
+		return err
+	}
+	if err := c.encoder.Encode(c.Config); err != nil {
+		panic(fmt.Sprintf("failed to encode config. %v\n", err.Error()))
+	}
+	return nil
+}
 func (c *ConfigManager) init() {
 	var err error
 	// read config from file
 	c.configFilePath = filepath.Join(configDir, configFileName)
 	c.configFile, err = os.OpenFile(c.configFilePath, os.O_CREATE|os.O_RDWR, os.ModePerm)
 	if err != nil {
-		panic(fmt.Sprintf("failed to initilize config manager. %v", err.Error()))
+		panic(fmt.Sprintf("failed to open config file. %v\n", err.Error()))
 	}
-	buf, err := io.ReadAll(c.configFile)
+	c.encoder = json.NewEncoder(c.configFile)
+	c.encoder.SetIndent("", "  ")
+	c.decoder = json.NewDecoder(c.configFile)
+	c.Config = &Config{}
+	err = c.decoder.Decode(c.Config)
 	if err != nil {
-		panic(fmt.Sprintf("failed to initilize config manager. %v", err.Error()))
-	}
-	c.Config = new(Config)
-	if len(buf) != 0 {
-		err = json.Unmarshal(buf, &c.Config)
-		if err != nil {
-			fmt.Printf("failed to initilize config manager. %v\n", err.Error())
-		}
-	}
-
-	if c.Config.SaveDir == "" {
-		c.Config.SaveDir = downloadedDir
-	}
-	if c.Config.Addrs == nil {
-		c.Config.Addrs = make(map[string]HostConfig)
+		fmt.Printf("failed to decode config. %v\n", err.Error())
+		c.setDefault()
 	}
 }
 
@@ -116,17 +126,13 @@ func (c *ConfigManager) Save() error {
 }
 
 func (c *ConfigManager) Flush() error {
-	buf, err := json.MarshalIndent(c.Config, "", "  ")
+	err := c.configFile.Truncate(0)
 	if err != nil {
 		return err
 	}
-	_, err = c.configFile.Seek(0, io.SeekStart)
-	if err != nil {
-		fmt.Printf("failed to flush config. %v\n", err.Error())
-	}
-	_, err = c.configFile.Write(buf)
+	_, err = c.configFile.Seek(0, 0)
 	if err != nil {
 		return err
 	}
-	return nil
+	return c.encoder.Encode(c.Config)
 }

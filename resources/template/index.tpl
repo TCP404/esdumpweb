@@ -167,12 +167,14 @@
 </head>
 
 <body>
-    <button class="settings-button" onclick="showSettingsModal()">设置</button>
+    <!-- <button class="settings-button" onclick="showSettingsModal()">设置</button> -->
     {{ template "response_alert.tpl" }}
 
     {{ template "form.tpl" }}
 
     {{ template "feedback.tpl" }}
+
+    {{ template "logout.tpl" }}
 
     {{ template "shutdown.tpl" }}
 

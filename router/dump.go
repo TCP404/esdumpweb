@@ -146,7 +146,9 @@ func saveConfig(req schema.DumpReq) {
 	conf.TimeField = req.TimeField
 	conf.Product = req.Product
 	conf.Condition = req.Condition
-	initial.WireConfigManager().Save()
+	if err := initial.WireConfigManager().Flush(); err != nil {
+		slog.Error("save config failed", "err", err)
+	}
 }
 
 func processHandle(c *gin.Context) {

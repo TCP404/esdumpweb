@@ -24,6 +24,7 @@ const (
 	IndexClueAgg         = "clue_agg_alias"
 	IndexClueOverseasAgg = "clue_overseas_agg_alias"
 	IndexCrowdOnline     = "crowd_online_alias"
+	IndexCostGoodsFlowOnline = "cost_goods_flow_online_alias"
 	IndexCrowdAgg        = "crowd_agg_alias"
 	IndexToolsOnline     = "tools_online_alias"
 	IndexToolsAgg        = "tools_agg_alias"
@@ -38,6 +39,7 @@ var Indices = []string{
 	IndexClueAgg,
 	IndexClueOverseasAgg,
 	IndexCrowdOnline,
+	IndexCostGoodsFlowOnline,
 	IndexCrowdAgg,
 	IndexToolsOnline,
 	IndexToolsAgg,

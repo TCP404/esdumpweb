@@ -64,7 +64,7 @@ func uploadFile(token string) (*schema.FeishuFileUploadResp, error) {
 	var (
 		lm       = initial.WireLoggerManager()
 		filebase = filepath.Base(lm.GetLogFilePath())
-		filename = fmt.Sprintf("%v_%v.jsonl", filebase[:len(filebase)-len(filepath.Ext(filebase))], lm.GetLogTime().Format("20060102150405"))
+		filename = fmt.Sprintf("%v_%v.json", filebase[:len(filebase)-len(filepath.Ext(filebase))], lm.GetLogTime().Format("20060102150405"))
 		body     = &bytes.Buffer{}
 		writer   = multipart.NewWriter(body)
 	)

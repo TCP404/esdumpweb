@@ -2,10 +2,10 @@ VERSION=v0.1.0
 GO_BUILD=go build -ldflags "-s -w -X github.com/TCP404/esdump/constant.VERSION=$(VERSION)" -o
 
 BINARY_NAME=esdump
-MAC_AMD_EXE :=./exe/$(BINARY_NAME)_amd64.dmg
-MAC_ARM_EXE :=./exe/$(BINARY_NAME)_arm64.dmg
-LINUX_EXE   :=./exe/$(BINARY_NAME)
-WINDOWS_EXE :=./exe/$(BINARY_NAME).exe
+MAC_AMD_EXE :=./exe/mac/$(BINARY_NAME)_amd64.dmg
+MAC_ARM_EXE :=./exe/mac/$(BINARY_NAME)_arm64.dmg
+LINUX_EXE   :=./exe/linux/$(BINARY_NAME)
+WINDOWS_EXE :=./exe/win/$(BINARY_NAME).exe
 
 BUILD_MAC_AMD64     := CGO_ENABLED=0 GOOS=darwin  GOARCH=amd64 $(GO_BUILD) $(MAC_AMD_EXE) main.go
 BUILD_MAC_ARM64     := CGO_ENABLED=0 GOOS=darwin  GOARCH=arm64 $(GO_BUILD) $(MAC_ARM_EXE) main.go
