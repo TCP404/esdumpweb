@@ -19,6 +19,9 @@ func loginHandle(c *gin.Context) {
 	url := fmt.Sprintf("http://%s:%s@%s/", req.Username, req.Password, req.AddrHost)
 	p := fetch.Fetch(http.MethodGet, url).
 		Then(func(res *http.Response) {
+			if initial.WireConfig().Addrs == nil {
+				initial.WireConfig().Addrs = make(map[string]initial.HostConfig)
+			}
 			// save to config file
 			initial.WireConfig().Addrs[req.AddrName] = initial.HostConfig{
 				Host:     req.AddrHost,
