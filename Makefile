@@ -1,4 +1,4 @@
-VERSION=v0.1.0
+VERSION=v0.1.3
 GO_BUILD=go build -ldflags "-s -w -X github.com/TCP404/esdump/constant.VERSION=$(VERSION)" -o
 
 BINARY_NAME=esdump
@@ -17,7 +17,7 @@ COMPRESS_MAC_AMD := $(COMPRESS_UPX) $(MAC_AMD_EXE)
 COMPRESS_LINUX   := $(COMPRESS_UPX) $(LINUX_EXE)
 COMPRESS_WINDOWS := $(COMPRESS_UPX) $(WINDOWS_EXE)
 
-start: clean build build-win build-linux build-mac compress compress-win compress-linux compress-mac
+start: clean build compress zip
 
 build:
 	mkdir -p ./exe
@@ -58,3 +58,7 @@ compress-mac:
 clean:
 	rm -rf ./exe/*
 
+zip:
+	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_win.zip ./exe/win
+	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_linux.zip ./exe/linux
+	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_mac.zip ./exe/mac

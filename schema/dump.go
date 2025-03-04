@@ -106,11 +106,14 @@ func DumpFixer(req *DumpReq) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to parse condition")
 	}
-    c1 := core.M{"term": core.M{"product.keyword": req.Product}}
-    if req.Index == constant.IndexCostGoodsFlowOnline {
-        c1 = core.M{"term": core.M{"product": req.Product}}
-    }
-	condition.Filter = append(condition.Filter, c1)
+
+	if req.AddrName == "online" {
+		c1 := core.M{"term": core.M{"product.keyword": req.Product}}
+		if req.Index == constant.IndexCostGoodsFlowOnline {
+			c1 = core.M{"term": core.M{"product": req.Product}}
+		}
+		condition.Filter = append(condition.Filter, c1)
+	}
 	req.BodyBool = condition
 	return nil
 }

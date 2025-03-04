@@ -35,7 +35,7 @@
     <br>
 
     <label for="product">产品：</label>
-    <input type="text" id="product" name="product" required value="{{.product}}">
+    <input type="text" id="product" name="product" value="{{.product}}">
     <br>
 
     <label for="condition">条件：</label>

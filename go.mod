@@ -1,6 +1,6 @@
 module esdumpweb
 
-go 1.23.3
+go 1.23
 
 require (
 	github.com/TCP404/esdumpcore v0.1.2
