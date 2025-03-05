@@ -98,6 +98,14 @@
                     });
                     return;
                 }
+                if (response.status === 404) {
+                    response.json().then(data => {
+                        alert(data.message);
+                    }).catch(error => {
+                        alert('Error parsing JSON:', error);
+                    });
+                    return;
+                }
                 return response.json();
             })
             .then(data => {

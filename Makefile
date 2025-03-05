@@ -1,9 +1,9 @@
-VERSION=v0.1.3
+VERSION=v0.1.5
 GO_BUILD=go build -ldflags "-s -w -X github.com/TCP404/esdump/constant.VERSION=$(VERSION)" -o
 
 BINARY_NAME=esdump
-MAC_AMD_EXE :=./exe/mac/$(BINARY_NAME)_amd64.dmg
-MAC_ARM_EXE :=./exe/mac/$(BINARY_NAME)_arm64.dmg
+MAC_AMD_EXE :=./exe/mac-amd/$(BINARY_NAME)_amd64.dmg
+MAC_ARM_EXE :=./exe/mac-arm/$(BINARY_NAME)_arm64.dmg
 LINUX_EXE   :=./exe/linux/$(BINARY_NAME)
 WINDOWS_EXE :=./exe/win/$(BINARY_NAME).exe
 
@@ -13,7 +13,7 @@ BUILD_LINUX         := CGO_ENABLED=0 GOOS=linux   GOARCH=amd64 $(GO_BUILD) $(LIN
 BUILD_WINDOWS       := CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GO_BUILD) $(WINDOWS_EXE) main.go
 
 COMPRESS_UPX=upx --best
-COMPRESS_MAC_AMD := $(COMPRESS_UPX) $(MAC_AMD_EXE)
+COMPRESS_MAC_AMD := $(COMPRESS_UPX) $(MAC_AMD_EXE) --force-macos
 COMPRESS_LINUX   := $(COMPRESS_UPX) $(LINUX_EXE)
 COMPRESS_WINDOWS := $(COMPRESS_UPX) $(WINDOWS_EXE)
 
@@ -61,4 +61,5 @@ clean:
 zip:
 	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_win.zip ./exe/win
 	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_linux.zip ./exe/linux
-	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_mac.zip ./exe/mac
+	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_mac-amd.zip ./exe/mac-amd
+	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_mac-arm.zip ./exe/mac-arm

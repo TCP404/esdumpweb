@@ -11,7 +11,6 @@ import (
 
 	"github.com/TCP404/esdumpcore/core"
 	"github.com/TCP404/esdumpcore/outputer"
-	"github.com/TCP404/eutil"
 	"github.com/pkg/errors"
 )
 
@@ -51,12 +50,12 @@ func fixAddr(hostName string) (string, error) {
 	}
 }
 
-func fixIndex(index string) error {
-	if !eutil.In(index, constant.Indices...) {
-		return errors.New("invalid index")
-	}
-	return nil
-}
+// func fixIndex(index string) error {
+// 	if !eutil.In(index, constant.Indices...) {
+// 		return errors.New("invalid index")
+// 	}
+// 	return nil
+// }
 
 func fixCondition(cond string) (*core.ESBodyBool, error) {
 	if len(cond) == 0 {
@@ -89,9 +88,9 @@ func DumpFixer(req *DumpReq) error {
 	}
 	req.AddrHost = "http://" + host
 
-	if err := fixIndex(req.Index); err != nil {
-		return errors.Wrap(err, "failed to parse index")
-	}
+	// if err := fixIndex(req.Index); err != nil {
+	// 	return errors.Wrap(err, "failed to parse index")
+	// }
 
 	dir, filename := initial.WireConfig().SaveDir, fmt.Sprintf("%s_%s_%s_%s_%s.csv", req.Index, req.Product, req.TimeField, req.StartTime.Format("20060102150405"), req.EndTime.Format("20060102150405"))
 	req.SaveLocation = filepath.Join(dir, filename)

@@ -122,5 +122,6 @@ tmp/
 *.code-workspace
 output/
 exe/
+exe-*/
 
 .DS_Store

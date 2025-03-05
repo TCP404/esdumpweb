@@ -59,10 +59,22 @@ func dumpHandle(c *gin.Context) {
 
 	total, err := scheduler.QueryTotal(query)
 	if err != nil {
-		msg := "failed to query count"
-		slog.Error(msg, "err", errors.Cause(err).Error(), "body", string(query.BodyBytes))
+		if !errors.As(err, &core.ESResponseError{}) {
+			msg := "failed to query count"
+			slog.Error(msg, "err", errors.Cause(err).Error(), "request_body", string(query.BodyBytes))
+			c.JSON(http.StatusInternalServerError, gin.H{"message": msg, "total": 0})
+			return
+		}
+
+		errResp := err.(core.ESResponseError)
+		if errResp.Code == http.StatusNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Index not found", "total": 0})
+			return
+		}
+
+		msg := errResp.Error()
+		slog.Error(msg, "err", errors.Cause(err).Error(), "request_body", string(query.BodyBytes))
 		c.JSON(http.StatusInternalServerError, gin.H{"message": msg, "total": 0})
-		return
 	}
 
 	slog.Info("Query count", slog.Int64("total:", total))
