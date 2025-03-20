@@ -1,4 +1,4 @@
-VERSION=v0.1.5
+VERSION=v0.1.6
 GO_BUILD=go build -ldflags "-s -w -X github.com/TCP404/esdump/constant.VERSION=$(VERSION)" -o
 
 BINARY_NAME=esdump

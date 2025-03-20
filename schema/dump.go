@@ -27,6 +27,7 @@ type DumpReq struct {
 	EndTime       time.Time `json:"endTime"      validate:"required,ltfield=StartTime,ltfield=180d"`
 	Product       string    `json:"product"      validate:"required,gt=0"`
 	Condition     string    `json:"condition"`
+	SaveType      string    `json:"saveType"     validate:"required,oneof=csv xlsx"`
 	SaveLocation  string
 	AddrHost      string
 	OutputHandler outputer.Outputer[E]
@@ -76,6 +77,8 @@ func fixOutputHandler(location string) (outputer.Outputer[E], error) {
 	switch filepath.Ext(location) {
 	case ".csv":
 		return outputer.NewCSV[E](location), nil
+	case ".xlsx":
+		return outputer.NewXLSX[E](location), nil
 	default:
 		return nil, nil
 	}
@@ -88,11 +91,7 @@ func DumpFixer(req *DumpReq) error {
 	}
 	req.AddrHost = "http://" + host
 
-	// if err := fixIndex(req.Index); err != nil {
-	// 	return errors.Wrap(err, "failed to parse index")
-	// }
-
-	dir, filename := initial.WireConfig().SaveDir, fmt.Sprintf("%s_%s_%s_%s_%s.csv", req.Index, req.Product, req.TimeField, req.StartTime.Format("20060102150405"), req.EndTime.Format("20060102150405"))
+	dir, filename := initial.WireConfig().SaveDir, fmt.Sprintf("%s_%s_%s_%s_%s.%s", req.Index, req.Product, req.TimeField, req.StartTime.Format("20060102150405"), req.EndTime.Format("20060102150405"), req.SaveType)
 	req.SaveLocation = filepath.Join(dir, filename)
 
 	outputerHandler, err := fixOutputHandler(req.SaveLocation)
