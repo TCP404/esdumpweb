@@ -1,4 +1,11 @@
 <form id="myForm">
+    <label for="saveType">保存类型：</label>
+    <select id="saveType" name="saveType" required>
+        <option value="xlsx" selected>xlsx</option>
+        <option value="csv">csv</option>
+    </select>
+    <br>
+
     <label for="host">主机：</label>
     <select id="host" name="host" required>
         {{ if eq .host "agg" }}

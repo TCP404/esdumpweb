@@ -34,23 +34,6 @@ const (
 	FieldEventTime  = "event_time"
 )
 
-var Indices = []string{
-	IndexClueOnline,
-	IndexClueAgg,
-	IndexClueOverseasAgg,
-	IndexCrowdOnline,
-	IndexCostGoodsFlowOnline,
-	IndexCrowdAgg,
-	IndexToolsOnline,
-	IndexToolsAgg,
-}
-
-var TimeFields = []string{
-	FieldInsertTime,
-	FieldCreateTime,
-	FieldEventTime,
-}
-
 const (
 	FeishuFileUploadURL  = "https://open.feishu.cn/open-apis/im/v1/files"
 	FeishuSendMessageURL = "https://open.feishu.cn/open-apis/im/v1/messages"
