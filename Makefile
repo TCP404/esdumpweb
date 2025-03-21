@@ -2,8 +2,8 @@ VERSION=v0.1.6
 GO_BUILD=go build -ldflags "-s -w -X github.com/TCP404/esdump/constant.VERSION=$(VERSION)" -o
 
 BINARY_NAME=esdump
-MAC_AMD_EXE :=./exe/mac-amd/$(BINARY_NAME)_amd64.dmg
-MAC_ARM_EXE :=./exe/mac-arm/$(BINARY_NAME)_arm64.dmg
+MAC_AMD_EXE :=./exe/mac-amd/$(BINARY_NAME).dmg
+MAC_ARM_EXE :=./exe/mac-arm/$(BINARY_NAME).dmg
 LINUX_EXE   :=./exe/linux/$(BINARY_NAME)
 WINDOWS_EXE :=./exe/win/$(BINARY_NAME).exe
 
@@ -59,7 +59,7 @@ clean:
 	rm -rf ./exe/*
 
 zip:
-	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_win.zip ./exe/win
-	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_linux.zip ./exe/linux
-	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_mac-amd.zip ./exe/mac-amd
-	zip -r ./exe/$(BINARY_NAME)_$(VERSION)_mac-arm.zip ./exe/mac-arm
+	zip -r ./exe_$(VERSION)/$(BINARY_NAME)_$(VERSION)_win.zip ./exe/win
+	zip -r ./exe_$(VERSION)/$(BINARY_NAME)_$(VERSION)_linux.zip ./exe/linux
+	zip -r ./exe_$(VERSION)/$(BINARY_NAME)_$(VERSION)_mac-amd.zip ./exe/mac-amd
+	zip -r ./exe_$(VERSION)/$(BINARY_NAME)_$(VERSION)_mac-arm.zip ./exe/mac-arm

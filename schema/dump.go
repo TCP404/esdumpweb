@@ -25,7 +25,7 @@ type DumpReq struct {
 	TimeField     string    `json:"timeField"    validate:"required,oneof=insert_time event_time"`
 	StartTime     time.Time `json:"startTime"    validate:"required,gtfield=EndTime"`
 	EndTime       time.Time `json:"endTime"      validate:"required,ltfield=StartTime,ltfield=180d"`
-	Product       string    `json:"product"      validate:"required,gt=0"`
+	Product       string    `json:"product"`
 	Condition     string    `json:"condition"`
 	SaveType      string    `json:"saveType"     validate:"required,oneof=csv xlsx"`
 	SaveLocation  string
@@ -35,8 +35,6 @@ type DumpReq struct {
 }
 
 func (r *DumpReq) String() string {
-	// b, _ := json.Marshal(r)
-	// return string(eutil.B2S(b))
 	return fmt.Sprintf("%+v", *r)
 }
 
@@ -50,13 +48,6 @@ func fixAddr(hostName string) (string, error) {
 		return "", errors.New("invalid host")
 	}
 }
-
-// func fixIndex(index string) error {
-// 	if !eutil.In(index, constant.Indices...) {
-// 		return errors.New("invalid index")
-// 	}
-// 	return nil
-// }
 
 func fixCondition(cond string) (*core.ESBodyBool, error) {
 	if len(cond) == 0 {
@@ -105,7 +96,7 @@ func DumpFixer(req *DumpReq) error {
 		return errors.Wrap(err, "failed to parse condition")
 	}
 
-	if req.AddrName == "online" {
+	if req.AddrName == "online" && len(req.Product) > 0 {
 		c1 := core.M{"term": core.M{"product.keyword": req.Product}}
 		if req.Index == constant.IndexCostGoodsFlowOnline {
 			c1 = core.M{"term": core.M{"product": req.Product}}
